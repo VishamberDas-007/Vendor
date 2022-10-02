@@ -17,6 +17,8 @@ expressApp.listen(port, () => {
 
 // !!!!!!!!!!!!!!!!!!!!!!!.................................................!!!!!!!!!!!!!!!!!!!!!!!!
 
+// connecting to the mongodb in single index file
+
 // const mongoose = require("mongoose");
 // const url = "mongodb://127.0.0.1:27017/vendor";
 // mongoose.connect(url, {

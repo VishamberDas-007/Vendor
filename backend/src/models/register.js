@@ -1,5 +1,4 @@
-const { mongoose } = require("../db/conn");
-// const { model } = require("mongoose");
+const mongoose = require("mongoose");
 
 // defining the schema
 
@@ -25,6 +24,6 @@ const vendorDetails = new mongoose.Schema({
 });
 
 // collection creation
-const Register = new mongoose.model("Detail", vendorDetails);
-// console.log({ Register });
-module.exports = { Register };
+const Detail = new mongoose.model("Detail", vendorDetails);
+// console.log({ Detail });
+module.exports = { Detail };

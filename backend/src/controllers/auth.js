@@ -1,23 +1,24 @@
-const response = require("../responses/response");
-const { Register } = require("../models/register");
+const response = require("../responses/response"); // requiring the response
+const { Detail } = require("../models/register"); //requiring the Detail named collection from the model
 
 exports.register = async (req) => {
 	try {
-		console.log("Controller is working");
-
-		const vendorDetails = new Register({
+		// creating an instance for adding the vendor details
+		const vendorDetails = new Detail({
 			name: req.body.name,
 			email: req.body.email,
 			contactNo: req.body.contactNo,
 			password: req.body.password,
 		});
-		if (!req.body.name) {
-			return response.notFound("Name not found");
-		}
+
+		// saving the details into the collection
 		const result = await vendorDetails.save();
 		console.log(result);
-		return response.successResponse("Data added successfully", result);
+
+		// returning the response
+		return response.successResponse("Data added successfully", vendorDetails);
 	} catch (error) {
+		// returning the error if any
 		return response.errorResponse(
 			"Error occurred while inserting the details",
 			error
