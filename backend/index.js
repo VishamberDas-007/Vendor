@@ -2,14 +2,26 @@ const express = require("express");
 const expressApp = express();
 require("dotenv").config();
 require("./src/db/conn");
-
+const cors = require("cors");
 const bodyParser = require("body-parser"); // importing body-parser package
 expressApp.use(bodyParser.json()); // parses the json format
 expressApp.use(bodyParser.urlencoded({ extended: true })); // enhances to get the urlencoded
 
+// initializing the port number
 const port = process.env.PORT || 3000;
 
-expressApp.use("/vendor", require("./src/routes/auth"));
+// using cors for the sharing the resources on cross-platform
+expressApp.use(
+	cors({
+		origin: "*",
+	})
+);
+
+// importing the vendor auth routes
+// expressApp.use("/vendor", require("./src/routes/auth"));
+
+// importing the category crud routes
+expressApp.use("/category", require("./src/routes/crud"));
 
 expressApp.listen(port, () => {
 	console.log(`Server is running at port ${port}`);
