@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"); // importing the mongoose package
+require("dotenv").config();
 
-const url =
-	"mongodb+srv://visdas:mFkgT780NygeinS7@cluster0.bvlifu1.mongodb.net/vendor?retryWrites=true&w=majority"; // initializing the url
+const url = process.env.URL; // initializing the url
 
 // connecting to the mongoose db
 mongoose
