@@ -1,14 +1,11 @@
 import "./App.css";
-import {  InputBox } from "./components/input";
+import { InputBox } from "./components/input";
 import { SignupForm } from "./components/SignupForm";
 
 function App() {
 	return (
 		<div className="App">
-			<SignupForm/>
-			
-			
-			
+			<SignupForm />
 		</div>
 	);
 }
