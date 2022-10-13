@@ -36,12 +36,12 @@ exports.deleting = async (req) => {
 			return response.errorResponse("Object id is invalid", id);
 		}
 
-		const findCategory = await Detail.findOne({ id: id });
+		const findCategory = await Detail.findOne({ _id: id });
 		console.log({ findCategory });
 		if (!findCategory) {
 			return response.notFound("No such category found");
 		}
-		const deleteCategory = await Detail.deleteOne({ id: id });
+		const deleteCategory = await Detail.deleteOne({ _id: id });
 		return response.successResponse(
 			"Category deleted successfully",
 			findCategory
@@ -59,10 +59,10 @@ exports.deleting = async (req) => {
 exports.listing = async (req) => {
 	try {
 		const id = req.params.id;
-		console.log({ id });
+		// console.log({ id });
 		var result;
 		if (id) {
-			result = await Detail.findOne({ id: id });
+			result = await Detail.findOne({ _id: id });
 			// console.log(result);
 			if (!result) {
 				return response.notFound("No such category found!!");
@@ -70,7 +70,7 @@ exports.listing = async (req) => {
 		} else {
 			// searching the details from the collection
 			result = await Detail.find();
-			// console.log(result);
+			console.log(result);
 			if (result.length == 0) {
 				return response.notFound("No category found!!");
 			}
@@ -95,36 +95,37 @@ exports.update = async (req) => {
 		const name = req.body.name;
 		var result;
 
-		// if name not entered
+		// checking the availability of name
 		if (!name) {
 			return response.notFound("Please enter the name");
 		}
 
-		// Checking if the categoy already present
-		result = await Detail.findOne({ id: id });
-		// console.log({ result });
-		if (!result) {
-			return response.notFound("No such category present");
+		// find if the id is present or not
+		const idPresent = await Detail.find({
+			_id: { $ne: id },
+			name: name,
+		});
+
+		// checking if the category name with different id is present or not
+		if (idPresent.length > 0) {
+			return response.alreadyExists("Category already exists");
 		}
 
-		// finding the category if already present
-		result = await Detail.find({ id: { $ne: id } });
-		console.log("Found the result" + result);
-		// if (result) {
-		// 	return response.notFound("Category is already present");
-		// }
-
-		// updating the details
-		const updateDetails = await Detail.findOneAndUpdate(
-			{ id: id },
+		// updating the result
+		await Detail.findOneAndUpdate(
+			{ _id: id },
 			{
 				name: name,
 			}
 		);
 
 		// returning the response
-		return response.successResponse("Category updated successfully", { name });
+		return response.successResponse("Category updated successfully", {
+			_id: id,
+			name: name,
+		});
 	} catch (error) {
+		console.log({ error });
 		// returning the error response
 		return response.errorResponse(
 			"Error occurred while updating the category",
