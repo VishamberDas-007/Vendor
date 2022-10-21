@@ -18,7 +18,7 @@ expressApp.use(
 );
 
 // importing the vendor auth routes
-// expressApp.use("/vendor", require("./src/routes/auth"));
+expressApp.use("/vendor", require("./src/routes/auth"));
 
 // importing the category crud routes
 expressApp.use("/category", require("./src/routes/crud"));
