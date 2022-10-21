@@ -1,5 +1,6 @@
 const response = require("../responses/response"); // requiring the response
 const { Detail } = require("../models/register"); //requiring the Detail named collection from the model
+const bcrypt = require("bcrypt"); // requiring bcrypt
 
 exports.register = async (req) => {
 	try {
@@ -10,7 +11,9 @@ exports.register = async (req) => {
 			contactNo: req.body.mono,
 			password: req.body.password,
 		});
-
+		const hashedPassword = bcrypt.hashSync(vendorDetails.password, 7); // hashing the password
+		console.log({ hashedPassword });
+		vendorDetails.password = hashedPassword;
 		// saving the details into the collection
 		const result = await vendorDetails.save();
 		console.log(result);
