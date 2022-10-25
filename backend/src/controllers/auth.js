@@ -1,7 +1,10 @@
 const response = require("../responses/response"); // requiring the response
 const { Detail } = require("../models/register"); //requiring the Detail named collection from the model
+require("dotenv").config();
+const jwt = require("jsonwebtoken"); // requiring json web token
 const bcrypt = require("bcrypt"); // requiring bcrypt
 
+// for registering the details of vendor
 exports.register = async (req) => {
 	try {
 		// creating an instance for adding the vendor details
@@ -27,5 +30,49 @@ exports.register = async (req) => {
 			"Error occurred while inserting the details",
 			error
 		);
+	}
+};
+
+// for logging in
+exports.login = async (req) => {
+	try {
+		// req for the entered credentials
+		const credentials = {
+			email: req.body.email,
+			password: req.body.password,
+		};
+
+		// check if the cuurent credentials exist
+		const emailExist = await Detail.findOne({
+			email: credentials.email,
+		});
+		console.log({ emailExist });
+		// if email does not exist
+		if (!emailExist) {
+			return response.notFound("Not found");
+		}
+		// else email exists
+		else {
+			console.log(emailExist + " is found");
+			const credentialExists = await Detail.findOne({
+				email: credentials.email,
+				password: credentials.password,
+			});
+
+			// if the credential is not found
+			if (!credentialExists) {
+				return response.notFound("Invalid credentials");
+			}
+
+			// signimg a token
+			let token = jwt.sign({ credentialExists }, process.env.SECRET_KEY);
+
+			// returning the response
+			return response.successResponse("Login successfull", { token });
+		}
+	} catch (error) {
+		console.log({ error });
+		// returning the error resposne
+		return response.errorResponse("Error occurred while logging in", error);
 	}
 };
