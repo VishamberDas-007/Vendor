@@ -53,7 +53,6 @@ exports.login = async (req) => {
 		}
 		// else email exists
 		else {
-			console.log(emailExist + " is found");
 			const credentialExists = await Detail.findOne({
 				email: credentials.email,
 				password: credentials.password,
